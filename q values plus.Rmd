@@ -1,0 +1,99 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+# Benjamini-Hochberg (BH) procedure - Used to calculate q-values for multiple hypothesis tests.
+
+```{r}
+# Generate a vector of p-values
+p_values <- c(0.05, 0.01, 0.002, 0.008, 0.07, 0.03)
+
+# Perform the BH procedure
+q_values <- p.adjust(p_values, method = "BH")
+
+# Print the results
+print(q_values)
+```
+# Storey-Tibshirani (ST) procedure - An alternative to the BH procedure that is more powerful in certain situations.
+
+```{python}
+import numpy as np
+from statsmodels.stats.multitest import fdrcorrection
+
+# Generate a numpy array of p-values
+p_values = np.array([0.05, 0.01, 0.002, 0.008, 0.07, 0.03])
+
+# Perform the ST procedure
+q_values = fdrcorrection(p_values, alpha=0.05, method='indep')[1]
+
+# Print the results
+print(q_values)
+```
+
+# two-sample t-test in Python:
+```{python}
+import scipy.stats as stats
+
+# Generate two sets of data
+group1 = [10, 12, 14, 16, 18]
+group2 = [9, 11, 13, 15, 17]
+
+# Perform the t-test
+t_stat, p_value = stats.ttest_ind(group1, group2)
+
+# Print the results
+print("t-statistic:", t_stat)
+print("T-test p-value:", p_value)
+```
+
+# wilcox test
+
+```{python}
+from scipy.stats import wilcoxon
+
+# Perform Wilcoxon signed-rank test
+statistic, p_value = wilcoxon(group1, group2)
+
+# Print the test statistic and p-value
+print('Test statistic:', statistic)
+print('Wilcoxon p-value:', p_value)
+```
+
+
+# chi-squared test - Used to determine if there is a significant difference between the observed and expected frequencies of categorical data.
+
+```{r}
+# Generate a contingency table
+table <- matrix(c(25, 10, 15, 20), nrow = 2, ncol = 2)
+rownames(table) <- c("Male", "Female")
+colnames(table) <- c("Smoker", "Non-smoker")
+table
+
+# Perform the chi-squared test
+result <- chisq.test(table)
+
+# Print the results
+print(result)
+```
+# correlation test
+
+```{python}
+import pandas as pd
+
+# Create a DataFrame with multiple columns
+df = pd.DataFrame({'x': [1, 2, 3, 4, 5], 'y': [10, 20, 30, 40, 50], 'z': [5, 4, 3, 2, 1]})
+
+# Calculate the correlation between the two columns
+corr = df['x'].corr(df['z'])
+
+# Print the correlation coefficient
+print('Correlation coefficient:', corr)
+
+# Compute the correlation matrix
+corr_matrix = df.corr()
+
+# Print the correlation matrix
+print('Correlation matrix:\n', corr_matrix)
+```
+
