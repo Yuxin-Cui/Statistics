@@ -1,0 +1,59 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+# Load required libraries
+library(ggplot2)
+library(ggsignif)
+library(RColorBrewer)
+library(ggpubr)
+
+# Load the data
+df <- read.csv("data/exampledata_1.csv")
+
+# Define the number of colors to use in the palette
+num_colors <- 7
+
+# Generate a color palette using a palette function from RColorBrewer
+my_palette <- brewer.pal(num_colors, "Set1")
+
+# Loop through unique values of 'Round' and 'Day'
+for (value1 in unique(df$Round)) {
+  for (value2 in unique(df$Day)) {
+    # Subset the data frame based on the unique values
+    df_s <- subset(df, Round == value1 & Day == value2)
+
+    if (nrow(df_s) > 0) {
+      # Get unique values of the column of interest
+      unique_values <- unique(df_s$Process)
+
+      # Generate all possible pairs of items
+      pairs <- combn(unique_values, 2, simplify = FALSE)
+
+      # Create plots with the significance indication
+      for (k in c(5, 6)) {
+        # Get the looped variable name
+        variable_name <- colnames(df_s)[k]
+
+        p <- ggplot(df_s, aes(x = Process, y = df_s[, k], fill = Process)) +
+          geom_boxplot() +
+          geom_point(color = "black", size = 2) +
+          stat_compare_means(comparisons = pairs, method="t.test", label = "p.signif")+
+          #geom_signif(comparisons = pairs, map_signif_level = T, method="wilcox.test") +
+          labs(title = paste0(value1, "_Day", value2), y = variable_name) +
+          scale_fill_manual(values = my_palette) +
+          theme_classic()
+        
+        print(p)
+      }
+    }
+  }
+}
+
+```
+
+
+
+
